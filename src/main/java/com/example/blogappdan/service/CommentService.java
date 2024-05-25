@@ -13,7 +13,7 @@ import java.util.List;
 public class CommentService {
 
 
-    private final  CommentRepository commentRepository;
+    private  CommentRepository commentRepository;
 
     public Comment createOrUpdateComment(String text) {
         Comment comment = new Comment(text);

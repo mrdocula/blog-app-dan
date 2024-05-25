@@ -4,8 +4,9 @@ import com.example.blogappdan.service.CommentService;
 import com.example.blogappdan.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,8 +14,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class InitialData {
 
-    private final CommentService commentService;
-    private final UserService userService;
+    private static final Logger log = LoggerFactory.getLogger(InitialData.class);
+    private  CommentService commentService;
+    private  UserService userService;
     @PostConstruct
     public void initializeData(){
         log.info("Request received to create mock data.");

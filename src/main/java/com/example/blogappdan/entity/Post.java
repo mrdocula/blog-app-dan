@@ -19,10 +19,11 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int postId;
-    /*@ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private User author;*/
     private String title;
     private String text;
 
+    public Post(String title, String text) {
+        this.title = title;
+        this.text = text;
+    }
 }
