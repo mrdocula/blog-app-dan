@@ -20,4 +20,6 @@ public class CommentController {
     public ResponseEntity<Comment> createComment(@RequestParam("text") String text){
         return ResponseEntity.ok(commentService.createOrUpdateComment(text));
     }
+
+    // TODO: add endpoint to get all comments
 }

@@ -20,6 +20,8 @@ public class User {
     private String name;
     private String username;
 
+    // TODO: Create association between USER - POST
+
     public User(String name, String username){
         this.name = name;
         this.username = username;

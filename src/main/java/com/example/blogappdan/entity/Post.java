@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,9 @@ public class Post {
     private int postId;
     private String title;
     private String text;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> commentList;
 
     public Post(String title, String text) {
         this.title = title;

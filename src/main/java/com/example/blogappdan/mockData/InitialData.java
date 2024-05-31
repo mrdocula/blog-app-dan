@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class InitialData {
 
+    // TODO: add more data here - create user, create post for user and create 2 comments for post
+
     private static final Logger log = LoggerFactory.getLogger(InitialData.class);
     private  CommentService commentService;
     private  UserService userService;
