@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserService {
 
-    private  UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public User createOrUpdateUser(String name, String username){
         User user = new User(name, username);

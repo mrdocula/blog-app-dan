@@ -12,8 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentService {
 
-
-    private  CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     public Comment createOrUpdateComment(String text) {
         Comment comment = new Comment(text);
