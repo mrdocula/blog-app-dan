@@ -4,9 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity(name="blog-users")
 @Data
@@ -20,7 +23,10 @@ public class User {
     private String name;
     private String username;
 
-    // TODO: Create association between USER - POST
+    @OneToMany(mappedBy = "user")
+    private List<Post> postList;
+
+    // TODO: Create association between USER - POST - done
 
     public User(String name, String username){
         this.name = name;

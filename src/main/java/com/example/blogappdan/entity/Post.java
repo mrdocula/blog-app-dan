@@ -27,6 +27,10 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> commentList;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Post(String title, String text) {
         this.title = title;
         this.text = text;

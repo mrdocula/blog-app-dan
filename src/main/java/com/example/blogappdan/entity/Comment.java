@@ -1,6 +1,5 @@
 package com.example.blogappdan.entity;
 
-import com.example.blogappdan.service.PostService;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
