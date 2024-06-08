@@ -1,7 +1,9 @@
 package com.example.blogappdan.service;
 
 import com.example.blogappdan.entity.Comment;
+import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.repository.CommentRepository;
+import com.example.blogappdan.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,12 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public Comment createOrUpdateComment(String text) {
+    private final PostRepository postRepository;
+
+    public Comment createOrUpdateCommentForPost(int postId, String text) {
+        Post postToAddComment = postRepository.findById(postId).get();
         Comment comment = new Comment(text);
+        comment.setPost(postToAddComment);
         return commentRepository.save(comment);
     }
 
