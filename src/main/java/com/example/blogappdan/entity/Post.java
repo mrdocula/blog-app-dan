@@ -23,7 +23,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int postId;
     private String title;
-    private String text;
+    private String postText;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> commentList;
@@ -34,6 +34,6 @@ public class Post {
 
     public Post(String title, String text) {
         this.title = title;
-        this.text = text;
+        this.postText = text;
     }
 }

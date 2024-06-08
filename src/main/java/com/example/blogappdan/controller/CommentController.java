@@ -14,18 +14,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
-   private final CommentService commentService;
+    private final CommentService commentService;
 
     @PostMapping("/comments/create")
-    public ResponseEntity<Comment> createComment(@RequestParam("text") String text, @RequestParam("postId") int postId){
-        return ResponseEntity.ok(commentService.createOrUpdateCommentForPost(postId, text));
+    public ResponseEntity<Comment> createComment(@RequestParam("text") String text,
+        @RequestParam("postId") int postId) {
+        try {
+            return ResponseEntity.ok(commentService.createOrUpdateCommentForPost(postId, text));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     // TODO: add endpoint to get all comments - done
     @GetMapping("/comments")
-    public List<Comment> getAllComment(){
+    public List<Comment> getAllComment() {
         return commentService.getAllComment();
     }
-
 
 }
