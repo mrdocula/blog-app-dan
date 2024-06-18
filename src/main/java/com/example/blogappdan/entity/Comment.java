@@ -30,6 +30,7 @@ public class Comment {
     @JsonIgnore
     private Post post;
 
+
     public Comment(String text){
         this.text = text;
         time = LocalDateTime.now();

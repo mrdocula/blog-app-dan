@@ -1,6 +1,7 @@
 package com.example.blogappdan.mockData;
 
 import com.example.blogappdan.entity.Post;
+import com.example.blogappdan.entity.User;
 import com.example.blogappdan.service.CommentService;
 import com.example.blogappdan.service.PostService;
 import com.example.blogappdan.service.UserService;
@@ -25,7 +26,13 @@ public class InitialData {
         userService.createOrUpdateUser("Dani", "Mani");
 
         log.info("Request received to create mock data.");
-        Post post = postService.createPost("Java", "New version.");
+
+        User user = userService.createOrUpdateUser("Dan", "Dow");
+        postService.createPost(user.getId() ,"Boow", "Woow");
+        postService.createPost(user.getId() ,"Hooo", "Mooo");
+        postService.createPost(user.getId() ,"Lumpa", "Lumpa");
+
+        Post post = postService.createPost(user.getId() ,"Java", "New version.");
         commentService.createOrUpdateCommentForPost(post.getPostId(), "Great JAVA!!!");
         commentService.createOrUpdateCommentForPost(post.getPostId(), "My comment 9.");
         commentService.createOrUpdateCommentForPost(post.getPostId(), "My comment 5.");

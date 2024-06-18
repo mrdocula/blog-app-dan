@@ -27,6 +27,19 @@ public class UserController {
         return ResponseEntity.ok(userService.createOrUpdateUser(name, username));
     }
 
+
+    // @PostMapping("/comments/create")
+    //    public ResponseEntity<Comment> createComment(@RequestParam("text") String text,
+    //        @RequestParam("postId") int postId) {
+    //        try {
+    //            return ResponseEntity.ok(commentService.createOrUpdateCommentForPost(postId, text));
+    //        } catch (RuntimeException ex) {
+    //            return ResponseEntity.badRequest().build();
+    //        }
+    //    }
+
+
+
     @GetMapping("/users")
     public List<User> getAllUsers(){
         return userService.getAllUsers();

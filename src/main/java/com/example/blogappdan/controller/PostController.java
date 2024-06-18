@@ -20,8 +20,24 @@ public class PostController {
 
     @PostMapping("/posts/create")
     public ResponseEntity<Post> createPosts(@RequestParam("title") String title,
-                                           @RequestParam("text") String text){
-       return ResponseEntity.ok(postService.createPost(title, text));
+                                           @RequestParam("text") String text,
+                                            @RequestParam("userId") int userId){
+        try{
+            return ResponseEntity.ok(postService.createPost(userId, title, text));
+        }catch(RuntimeException ex){
+            return ResponseEntity.badRequest().build();
+        }
+      // return ResponseEntity.ok(postService.createPost(title, text));
     }
+
+    // @PostMapping("/comments/create")
+    //    public ResponseEntity<Comment> createComment(@RequestParam("text") String text,
+    //        @RequestParam("postId") int postId) {
+    //        try {
+    //            return ResponseEntity.ok(commentService.createOrUpdateCommentForPost(postId, text));
+    //        } catch (RuntimeException ex) {
+    //            return ResponseEntity.badRequest().build();
+    //        }
+    //    }
 
 }
