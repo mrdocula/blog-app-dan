@@ -24,29 +24,18 @@ public class CommentService {
 
     private final UserRepository userRepository;
 
-    public Comment createOrUpdateCommentForPost(int postId, String text) {
+    public Comment createOrUpdateCommentForPost(int postId, int userId, String text) {
         Optional<Post> optionalPost = postRepository.findById(postId);
-        if (optionalPost.isPresent()) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalPost.isPresent() && optionalUser.isPresent()) {
             Comment comment = new Comment(text);
             comment.setPost(optionalPost.get());
+            comment.setUser(optionalUser.get());
             return commentRepository.save(comment);
         } else {
             throw new RuntimeException("Post with ID '" + postId + "' does not exist!");
         }
     }
-
-//    public Comment createOrUpdateCommentForUser(int userId, int postId, String text) {
-//        Optional<User> optionalUser = userRepository.findById(userId);
-//        Optional<Post> optionalPost = postRepository.findById(postId);
-//        if (optionalPost.isPresent() && optionalUser.isPresent()) {
-//            Comment comment = new Comment(text);
-//            comment.setPost(optionalPost.get());
-//            comment.setUser(optionalUser.get());
-//            return commentRepository.save(comment);
-//        } else {
-//            throw new RuntimeException("Post with ID '" + postId + "' and User with ID '" + userId + "' does not exist!");
-//        }
-//    }
 
 
     public Comment getCommentById(int id) {

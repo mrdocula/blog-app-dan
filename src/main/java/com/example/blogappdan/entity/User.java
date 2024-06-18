@@ -26,6 +26,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Post> postList;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList;
+
     // TODO: Create association between USER - POST - done
 
     public User(String name, String username){

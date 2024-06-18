@@ -33,9 +33,9 @@ public class InitialData {
         postService.createPost(user.getId() ,"Lumpa", "Lumpa");
 
         Post post = postService.createPost(user.getId() ,"Java", "New version.");
-        commentService.createOrUpdateCommentForPost(post.getPostId(), "Great JAVA!!!");
-        commentService.createOrUpdateCommentForPost(post.getPostId(), "My comment 9.");
-        commentService.createOrUpdateCommentForPost(post.getPostId(), "My comment 5.");
+        commentService.createOrUpdateCommentForPost(post.getPostId(), user.getId(),"Great JAVA!!!");
+        commentService.createOrUpdateCommentForPost(post.getPostId(),  user.getId(),"My comment 9.");
+        commentService.createOrUpdateCommentForPost(post.getPostId(),  user.getId(),"My comment 5.");
 
     }
 

@@ -13,36 +13,31 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/comments")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comments/create")
+    @PostMapping("/create")
     public ResponseEntity<Comment> createComment(@RequestParam("text") String text,
+                                                 @RequestParam("userId") int userId,
                                                  @RequestParam("postId") int postId) {
         try {
-            return ResponseEntity.ok(commentService.createOrUpdateCommentForPost(postId, text));
+            Comment savedComment = commentService.createOrUpdateCommentForPost(postId, userId, text);
+            return ResponseEntity.ok(savedComment);
         } catch (RuntimeException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-//    @PostMapping("/comments/create")
-//    public ResponseEntity<Comment> createComment(@RequestParam("text") String text,
-//                                                 @RequestParam("postId") int postId,
-//                                                @RequestParam("userId") int userId) {
-//        try {
-//            return ResponseEntity.ok(commentService.createOrUpdateCommentForUser(userId,postId, text));
-//        } catch (RuntimeException ex) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
-
-
-    // TODO: add endpoint to get all comments - done
-    @GetMapping("/comments")
+    @GetMapping("/list")
     public List<Comment> getAllComment() {
         return commentService.getAllComment();
     }
+
+    // TODO: add an endpoint to delete comment
+    // TODO: subtask - create method in CommentService to remove comment from the database
+    // Make sure to throw and catch exceptions
+
 
 }

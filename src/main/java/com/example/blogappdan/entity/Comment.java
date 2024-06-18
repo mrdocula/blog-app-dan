@@ -30,6 +30,10 @@ public class Comment {
     @JsonIgnore
     private Post post;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
     public Comment(String text){
         this.text = text;

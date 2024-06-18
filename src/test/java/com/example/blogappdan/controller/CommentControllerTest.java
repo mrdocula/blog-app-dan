@@ -3,9 +3,9 @@ package com.example.blogappdan.controller;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
+import com.example.blogappdan.entity.User;
 import com.example.blogappdan.service.CommentService;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
@@ -37,25 +37,29 @@ public class CommentControllerTest {
 
     @Test
     public void createComment_shouldCreateComment() throws Exception {
+        User user = new User("Tom", "tom");
         // when - then
         // when commentService.createOrUpdateCommentForPost(postId, text) then return status ok
         Comment comment = new Comment(1, "Some text", LocalDateTime.now(),
-            new Post("Some post title", "Some Post text"));
-        when(commentService.createOrUpdateCommentForPost(1, "Some text")).thenReturn(comment);
+            new Post("Some post title", "Some Post text"), user);
+        when(commentService.createOrUpdateCommentForPost(1, user.getId(), "Some text")).thenReturn(comment);
         mockMvc.perform(
             post("/comments/create")
                 .param("text", "Some text")
+                .param("userId", "1")
                 .param("postId", "1")
         ).andExpect(status().isOk());
     }
 
     @Test
     public void createComment_shouldNotCreateComment() throws Exception {
-        when(commentService.createOrUpdateCommentForPost(1, "Some text")).thenThrow(
+        User user = new User("Tom", "tom");
+        when(commentService.createOrUpdateCommentForPost(1, user.getId(), "Some text")).thenThrow(
             new RuntimeException("Post with ID '1' does not exist!"));
         mockMvc.perform(
             post("/comments/create")
                 .param("text", "Some text")
+                .param("userId", String.valueOf(user.getId()))
                 .param("postId", "1")
         ).andExpect(status().isBadRequest());
     }
