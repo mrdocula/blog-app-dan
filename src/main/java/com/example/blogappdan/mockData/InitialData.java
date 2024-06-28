@@ -37,6 +37,7 @@ public class InitialData {
         commentService.createOrUpdateCommentForPost(post.getPostId(),  user.getId(),"My comment 9.");
         commentService.createOrUpdateCommentForPost(post.getPostId(),  user.getId(),"My comment 5.");
 
+
     }
 
 }

@@ -4,6 +4,7 @@ import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,16 @@ public class CommentController {
     @GetMapping("/list")
     public List<Comment> getAllComment() {
         return commentService.getAllComment();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Comment> deleteComment(@RequestParam("comment_id") int commentId){
+        try{
+            Comment deleteComment = commentService.deleteCommentFromDatabase(commentId);
+            return ResponseEntity.ok(deleteComment);
+        }catch(Exception ex){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     // TODO: add an endpoint to delete comment

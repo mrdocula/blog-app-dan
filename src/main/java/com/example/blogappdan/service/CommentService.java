@@ -44,7 +44,17 @@ public class CommentService {
 
     public void deleteComment(Comment comment) {
         commentRepository.delete(comment);
+    }
 
+    public Comment deleteCommentFromDatabase(int commentId){
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        if (optionalComment.isPresent()){
+            Comment comment = optionalComment.get();
+            commentRepository.delete(comment);
+            return comment;
+        }else{
+            throw new RuntimeException("Comment with ID '" + commentId + "' does not exist!");
+        }
     }
 
     public List<Comment> getAllComment() {
