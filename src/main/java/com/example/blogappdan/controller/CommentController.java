@@ -46,9 +46,4 @@ public class CommentController {
         }
     }
 
-    // TODO: add an endpoint to delete comment
-    // TODO: subtask - create method in CommentService to remove comment from the database
-    // Make sure to throw and catch exceptions
-
-
 }

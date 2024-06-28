@@ -2,7 +2,9 @@ package com.example.blogappdan.controller;
 
 import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
+import com.example.blogappdan.entity.User;
 import com.example.blogappdan.service.PostService;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,11 +44,8 @@ public class PostControllerTest {
     public void createPost_shouldCreatePost() throws Exception {
 
        // List<Comment> commentList = List.of(new Comment(1, "text", LocalDateTime.now(), new Post()));
-
-        Post post = new Post(1, "title", "text", null, null);
-
+        Post post = new Post(1, "title", "text", Arrays.asList(), new User());
         when(postService.createPost(1, "title", "text")).thenReturn(post);
-
         mockMvc.perform(post("/posts/create")
                         .param("title", "title")
                         .param("text", "text")
