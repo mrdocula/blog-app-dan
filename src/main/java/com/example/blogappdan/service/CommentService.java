@@ -3,13 +3,14 @@ package com.example.blogappdan.service;
 import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.entity.User;
+import com.example.blogappdan.exceptions.BusinessExceptionReason;
+import com.example.blogappdan.exceptions.BusinessException;
 import com.example.blogappdan.repository.CommentRepository;
 import com.example.blogappdan.repository.PostRepository;
 import java.util.Optional;
 
 import com.example.blogappdan.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,14 +47,14 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    public Comment deleteCommentFromDatabase(int commentId){
+    public Comment deleteCommentFromDatabase(int commentId) throws BusinessException {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
-        if (optionalComment.isPresent()){
+        if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();
             commentRepository.delete(comment);
             return comment;
-        }else{
-            throw new RuntimeException("Comment with ID '" + commentId + "' does not exist!");
+        } else {
+            throw new BusinessException(BusinessExceptionReason.COMMENT_ID_INVALID);
         }
     }
 
