@@ -1,10 +1,8 @@
 package com.example.blogappdan.controller;
 
-import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.entity.User;
 import com.example.blogappdan.service.PostService;
-import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,9 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,40 +36,30 @@ public class PostControllerTest {
     private PostService postService;
 
     @Test
-    public void createPost_shouldCreatePost() throws Exception {
+    public void createPost_shouldCreatePostForUser() throws Exception {
 
-       // List<Comment> commentList = List.of(new Comment(1, "text", LocalDateTime.now(), new Post()));
-        Post post = new Post(1, "title", "text", Arrays.asList(), new User());
-        when(postService.createPost(1, "title", "text")).thenReturn(post);
-        mockMvc.perform(post("/posts/create")
+        Post post = new Post(1, "title", "text", null, null);
+        when(postService.createPostForUser(1, "title", "text")).thenReturn(post);
+        mockMvc.perform(
+                post("/posts/create")
                         .param("title", "title")
                         .param("text", "text")
                         .param("userId", "1"))
                 .andExpect(status().isOk());
     }
 
-  /*  @Test
-    public void createComment_shouldCreateComment() throws Exception {
-        // when - then
-        // when commentService.createOrUpdateCommentForPost(postId, text) then return status ok
-        Comment comment = new Comment(1, "Some text", LocalDateTime.now(),
-                new Post("Some post title", "Some Post text"));
-        when(commentService.createOrUpdateCommentForPost(1, "Some text")).thenReturn(comment);
+    @Test
+    public void createPost_shouldNotCreatePostForUser() throws Exception{
+
+        User user = new User("Tom", "tom");
+        when(postService.createPostForUser(user.getId(), "Some title" , "Some text")).thenThrow(
+                new RuntimeException("User with id: " + user.getId() + " does not exist!"));
         mockMvc.perform(
-                post("/comments/create")
+                post("/posts/create")
+                        .param("title", "Some title")
                         .param("text", "Some text")
-                        .param("postId", "1")
-        ).andExpect(status().isOk());
+                        .param("userId", String.valueOf(user.getId()))
+        ).andExpect(status().isBadRequest());
     }
 
-    @Test
-    public void createComment_shouldNotCreateComment() throws Exception {
-        when(commentService.createOrUpdateCommentForPost(1, "Some text")).thenThrow(
-                new RuntimeException("Post with ID '1' does not exist!"));
-        mockMvc.perform(
-                post("/comments/create")
-                        .param("text", "Some text")
-                        .param("postId", "1")
-        ).andExpect(status().isBadRequest());
-    }*/
 }

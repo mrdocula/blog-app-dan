@@ -38,14 +38,27 @@ public class CommentService {
         }
     }
 
+    public Comment getCommentById(int commentId) {
+        return commentRepository.findById(commentId).orElse(null);
+    }
 
-    public Comment getCommentById(int id) {
-        return commentRepository.findById(id).orElse(null);
+    public List<Comment> getAllComments() {
+        return (List<Comment>) commentRepository.findAll();
+    }
+
+    public List<Comment> getAllCommentsByPostId(int postId) {
+        return commentRepository.findAllByPostId(postId);
+    }
+
+    public List<Comment> getAllCommentsByUserId(int userId) {
+        return commentRepository.findAllByUserId(userId);
     }
 
     public void deleteComment(Comment comment) {
         commentRepository.delete(comment);
     }
+
+    //  ?   delete comments by post id and user aid
 
     public Comment deleteCommentFromDatabase(int commentId) throws BusinessException {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
@@ -56,9 +69,5 @@ public class CommentService {
         } else {
             throw new BusinessException(BusinessExceptionReason.COMMENT_ID_INVALID);
         }
-    }
-
-    public List<Comment> getAllComment() {
-        return (List<Comment>) commentRepository.findAll();
     }
 }
