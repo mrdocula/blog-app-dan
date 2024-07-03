@@ -16,38 +16,30 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User createOrUpdateUser(String name, String surname){
-        User user = new User(name, surname);
-        Optional<User> optionalUser = userRepository.findById(user.getId());
-        if(optionalUser.isPresent()){
-           return userRepository.save(user);
-        }else{
-            //TODO how can use Exception with this method update or create
-            //TODO which Exceprion to use here?
-            throw new RuntimeException("User not found or User already created");
-        }
+    public User createOrUpdateUser(String name, String surname) {
+        // TODO: separate create and update functionalities (update by user ID)
+        return null;
     }
 
-    public User getUserById(int userId){
+    public User getUserById(int userId) {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();
     }
-    //TODO need create method getAllUserByPostID
 
-    public void deleteUser(User user){
+    public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
-    public User deleteUserById(int userId)throws BusinessException{
+    public User deleteUserById(int userId) throws BusinessException {
         Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             userRepository.delete(user);
             return user;
-        }else{
+        } else {
             throw new BusinessException(BusinessExceptionReason.USER_ID_INVALID);
         }
     }

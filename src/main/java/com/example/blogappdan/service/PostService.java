@@ -22,38 +22,34 @@ public class PostService {
 
     public Post createPostForUser(int userId, String title, String text) throws BusinessException {
         Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             Post post = new Post(title, text);
             post.setUser(optionalUser.get());
             return postRepository.save(post);
-        }else{
+        } else {
             throw new BusinessException(BusinessExceptionReason.USER_ID_INVALID);
         }
     }
 
-    public Post getPostById(int postId){
+    public Post getPostById(int postId) {
         return postRepository.findById(postId).orElse(null);
     }
 
-    public List<Post> getAllPosts(){
-        return (List<Post> )postRepository.findAll();
+    public List<Post> getAllPosts() {
+        return (List<Post>) postRepository.findAll();
     }
 
-    public List<Post> getAllPostsByUserId(int userId){
-           return postRepository.findAllByUserId(userId);
-    }
-
-        public void deletePost(Post post){
-            postRepository.delete(post);
+    public List<Post> getAllPostsByUserId(int userId) {
+        return postRepository.findAllByUserId(userId);
     }
 
     public Post deletePostById(int postId) throws BusinessException {
         Optional<Post> optionalPost = postRepository.findById(postId);
-        if(optionalPost.isPresent()){
+        if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
             postRepository.delete(post);
             return post;
-        }else{
+        } else {
             throw new BusinessException(BusinessExceptionReason.POST_ID_INVALID);
         }
     }

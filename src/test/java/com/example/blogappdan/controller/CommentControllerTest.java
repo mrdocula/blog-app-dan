@@ -3,7 +3,6 @@ package com.example.blogappdan.controller;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.entity.User;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -107,7 +105,7 @@ public class CommentControllerTest {
 
     @Test
     public void deleteComment_shouldDeleteComment() throws Exception {
-        when(commentService.deleteCommentFromDatabase(1)).thenReturn(comment1);
+        when(commentService.deleteCommentByCommentId(1)).thenReturn(comment1);
 
         mockMvc.perform(delete("/comments/delete/1")
                         .param("commentId", "1"))
@@ -116,7 +114,7 @@ public class CommentControllerTest {
 
     @Test
     public void deleteCommentNotFound_shouldReturnBadRequest() throws Exception {
-        when(commentService.deleteCommentFromDatabase(1)).thenThrow(new RuntimeException("Comment not found"));
+        when(commentService.deleteCommentByCommentId(1)).thenThrow(new RuntimeException("Comment not found"));
 
         mockMvc.perform(delete("/comments/delete/1")
                         .param("commentId", "1"))

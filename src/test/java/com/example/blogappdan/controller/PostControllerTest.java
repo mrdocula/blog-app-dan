@@ -3,7 +3,10 @@ package com.example.blogappdan.controller;
 import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.entity.User;
+import com.example.blogappdan.exceptions.BusinessException;
+import com.example.blogappdan.exceptions.BusinessExceptionReason;
 import com.example.blogappdan.service.PostService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,7 +74,7 @@ public class PostControllerTest {
     @Test
     public void createPost_shouldNotCreatePostForUser() throws Exception{
         when(postService.createPostForUser(user.getId(), post.getTitle(), post.getPostText())).thenThrow(
-                new RuntimeException("User with id: " + user.getId() + " does not exist!"));
+                new BusinessException(BusinessExceptionReason.USER_ID_INVALID));
         mockMvc.perform(
                 post("/posts/create")
                         .param("title", "title")
@@ -92,7 +95,6 @@ public class PostControllerTest {
     @Test
     public void getPostById_shouldReturnPost()throws Exception{
         when(postService.getPostById(1)).thenReturn(post);
-
         mockMvc.perform(get("/posts/1"))
                 .andExpect(status().isOk());
     }
@@ -101,7 +103,6 @@ public class PostControllerTest {
     public void getAllCommentsByUserId_shouldAllComments() throws Exception {
         List<Post> posts = Arrays.asList(post1, post2);
         when(postService.getAllPostsByUserId(1)).thenReturn(posts);
-
         mockMvc.perform(get("/posts/1/post"))
                 .andExpect(status().isOk());
     }
@@ -111,4 +112,6 @@ public class PostControllerTest {
     public void deletePost_shouldDeletePost() throws Exception{
         when(postService.deletePost(new Post("title", "text"));
     }*/
+
+
 }

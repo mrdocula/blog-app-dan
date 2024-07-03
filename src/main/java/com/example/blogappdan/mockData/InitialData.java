@@ -44,6 +44,9 @@
 
 package com.example.blogappdan.mockData;
 
+import com.example.blogappdan.entity.Post;
+import com.example.blogappdan.entity.User;
+import com.example.blogappdan.exceptions.BusinessException;
 import com.example.blogappdan.service.CommentService;
 import com.example.blogappdan.service.PostService;
 import com.example.blogappdan.service.UserService;
@@ -62,13 +65,13 @@ public class InitialData {
     private final UserService userService;
     private final PostService postService;
 
-    //TODO don't work with
-    @PostConstruct
-    public void initializeData() {
-        //userService.createOrUpdateUser("Dani", "Mani");
-
-        //log.info("Request received to create mock data.");
-
+//    //TODO don't work with
+//    @PostConstruct
+//    public void initializeData() throws BusinessException {
+//        userService.createOrUpdateUser("Dani", "Mani");
+//
+//        log.info("Request received to create mock data.");
+//
 //        User user = userService.createOrUpdateUser("Dan", "Dow");
 //        if (user != null) {
 //            postService.createPostForUser(user.getId(), "Boow", "Woow");
@@ -82,6 +85,6 @@ public class InitialData {
 //                commentService.createOrUpdateCommentForPost(post.getPostId(), user.getId(), "My comment 5.");
 //            }
 //        }
-   }
+//   }
 }
 

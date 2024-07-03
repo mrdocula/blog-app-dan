@@ -50,9 +50,9 @@ public class CommentService {
     public List<Comment> getAllCommentsByPostId(int postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()){
-            return (List<Comment>) commentRepository.findAll();
+            return optionalPost.get().getCommentList();
         }else{
-            throw  new RuntimeException("Not found post!");
+            throw new RuntimeException("Not found post!");
         }
     }
 
@@ -60,18 +60,14 @@ public class CommentService {
     public List<Comment> getAllCommentsByUserId(int userId) throws BusinessException {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()){
-            return (List<Comment>) commentRepository.findAll();
+            return optionalUser.get().getCommentList();
         }else{
             throw new BusinessException(BusinessExceptionReason.USER_ID_INVALID);
         }
     }
 
-    //TODO  ?   delete comments by post id and user aid
-    public void deleteComment(Comment comment) {
-        commentRepository.delete(comment);
-    }
 
-    public Comment deleteCommentFromDatabase(int commentId) throws BusinessException {
+    public Comment deleteCommentByCommentId(int commentId) throws BusinessException {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();

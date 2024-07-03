@@ -38,7 +38,7 @@ public class CommentController {
         return commentService.getAllComments();
     }
 
-    @GetMapping("{commentId}")
+    @GetMapping("/{commentId}")
     public ResponseEntity<Comment> getCommentById(@PathVariable("commentId") int commentId){
         Comment comment = commentService.getCommentById(commentId);
         if (comment != null){
@@ -48,7 +48,7 @@ public class CommentController {
         }
     }
 
-    @GetMapping("{postId}/comment")
+    @GetMapping("/post/{postId}")
     public ResponseEntity<List<Comment>> getAllCommentsByPostId(@PathVariable("postId") int postId){
         List<Comment> comments = commentService.getAllCommentsByPostId(postId);
         if (comments != null){
@@ -58,7 +58,7 @@ public class CommentController {
         }
     }
 
-    @GetMapping("{userId}/user-comments")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<Comment>> getAllCommentsByUserId(@PathVariable("userId") int userId) throws BusinessException {
         List<Comment> comments = commentService.getAllCommentsByUserId(userId);
         if (comments != null){
@@ -71,7 +71,7 @@ public class CommentController {
     @DeleteMapping("/delete/{commentId}")
     public ResponseEntity<Comment> deleteComment(@PathVariable("commentId") int commentId){
         try{
-            Comment deleteComment = commentService.deleteCommentFromDatabase(commentId);
+            Comment deleteComment = commentService.deleteCommentByCommentId(commentId);
             return ResponseEntity.ok(deleteComment);
         }catch(Exception ex){
             return ResponseEntity.badRequest().build();
