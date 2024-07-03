@@ -5,5 +5,4 @@ public enum ExceptionSource {
     USER,
     POST,
     COMMENT
-
 }

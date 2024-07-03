@@ -1,7 +1,7 @@
 package com.example.blogappdan.controller;
 
-import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
+import com.example.blogappdan.exceptions.BusinessException;
 import com.example.blogappdan.service.CommentService;
 import com.example.blogappdan.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class PostController {
         try {
             Post savedPost = postService.createPostForUser(userId, title, text);
             return ResponseEntity.ok(savedPost);
-        } catch (RuntimeException ex) {
+        } catch (BusinessException ex) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -54,15 +54,16 @@ public class PostController {
     }
 
     // TODO: add endpoint to get all comments to post by post id
-    @GetMapping("/{postId}/comment")
-    public ResponseEntity<List<Comment>> getAllCommentsByPostId(@PathVariable("postId") int postId){
-        List<Comment> comments = commentService.getAllCommentsByPostId(postId);
-        if (comments != null){
-            return  ResponseEntity.ok(comments);
-        }else{
-            return ResponseEntity.badRequest().build();
-        }
-    }
+    //TODO this method has CommentController -  ????
+//    @GetMapping("/{postId}/comment")
+//    public ResponseEntity<List<Comment>> getAllCommentsByPostId(@PathVariable("postId") int postId){
+//        List<Comment> comments = commentService.getAllCommentsByPostId(postId);
+//        if (comments != null){
+//            return  ResponseEntity.ok(comments);
+//        }else{
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 
     // TODO: add endpoint to get all posts by user id
     @GetMapping("/{userId}/post")
@@ -76,7 +77,7 @@ public class PostController {
     }
 
     // TODO: add endpoint to delete post +
-    //TODO I need this method or NOT
+    //TODO  need this method or NOT  ???
     @DeleteMapping("/delete")
     public void deletePost(Post post){
         postService.deletePost(post);
@@ -91,5 +92,4 @@ public class PostController {
             return ResponseEntity.notFound().build();
         }
     }
-
 }

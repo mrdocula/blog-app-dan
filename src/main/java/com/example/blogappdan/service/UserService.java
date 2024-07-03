@@ -1,6 +1,8 @@
 package com.example.blogappdan.service;
 
 import com.example.blogappdan.entity.User;
+import com.example.blogappdan.exceptions.BusinessException;
+import com.example.blogappdan.exceptions.BusinessExceptionReason;
 import com.example.blogappdan.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,13 +16,14 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User createOrUpdateUser(String name, String username){
-        User user = new User(name, username);
+    public User createOrUpdateUser(String name, String surname){
+        User user = new User(name, surname);
         Optional<User> optionalUser = userRepository.findById(user.getId());
         if(optionalUser.isPresent()){
            return userRepository.save(user);
         }else{
             //TODO how can use Exception with this method update or create
+            //TODO which Exceprion to use here?
             throw new RuntimeException("User not found or User already created");
         }
     }
@@ -38,14 +41,14 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public User deleteUserById(int userId){
+    public User deleteUserById(int userId)throws BusinessException{
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
             userRepository.delete(user);
             return user;
         }else{
-            throw new RuntimeException("Not found user!");
+            throw new BusinessException(BusinessExceptionReason.USER_ID_INVALID);
         }
     }
 }

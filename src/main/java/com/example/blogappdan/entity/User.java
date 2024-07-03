@@ -21,7 +21,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    private String username;
+    private String surname;
 
     @OneToMany(mappedBy = "user")
     private List<Post> postList;
@@ -29,8 +29,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> commentList;
 
-    public User(String name, String username){
+    public User(String name, String surname){
         this.name = name;
-        this.username = username;
+        this.surname = surname;
     }
 }

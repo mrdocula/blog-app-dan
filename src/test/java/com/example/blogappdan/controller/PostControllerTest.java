@@ -1,8 +1,10 @@
 package com.example.blogappdan.controller;
 
+import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.entity.User;
 import com.example.blogappdan.service.PostService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,9 +14,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -35,31 +41,74 @@ public class PostControllerTest {
     @MockBean
     private PostService postService;
 
+    private Post post;
+    private Post post1;
+    private Post post2;
+    private User user;
+    private Comment comment;
+
+    @BeforeEach
+    void setUp(){
+        post = new Post("title", "text");
+        post1 = new Post("Some post title 1", "Some Post text 1");
+        post2 = new Post("Some post title 2", "Some Post text 2");
+        user = new User("Tom", "William");
+        comment = new Comment(1, "Some text 1", LocalDateTime.now(), post, user);
+    }
+
+
     @Test
     public void createPost_shouldCreatePostForUser() throws Exception {
-
-        Post post = new Post(1, "title", "text", null, null);
-        when(postService.createPostForUser(1, "title", "text")).thenReturn(post);
+        when(postService.createPostForUser(user.getId(), post.getTitle(), post.getPostText())).thenReturn(post);
         mockMvc.perform(
                 post("/posts/create")
                         .param("title", "title")
                         .param("text", "text")
-                        .param("userId", "1"))
+                        .param("userId",  String.valueOf(user.getId())))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void createPost_shouldNotCreatePostForUser() throws Exception{
-
-        User user = new User("Tom", "tom");
-        when(postService.createPostForUser(user.getId(), "Some title" , "Some text")).thenThrow(
+        when(postService.createPostForUser(user.getId(), post.getTitle(), post.getPostText())).thenThrow(
                 new RuntimeException("User with id: " + user.getId() + " does not exist!"));
         mockMvc.perform(
                 post("/posts/create")
-                        .param("title", "Some title")
-                        .param("text", "Some text")
+                        .param("title", "title")
+                        .param("text", "text")
                         .param("userId", String.valueOf(user.getId()))
         ).andExpect(status().isBadRequest());
     }
 
+    @Test
+    public void getAllPosts_shouldReturnAllPosts()throws Exception{
+        List<Post> allPosts = Arrays.asList(post1, post2);
+        when(postService.getAllPosts()).thenReturn(allPosts);
+
+        mockMvc.perform(get("/posts/list"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getPostById_shouldReturnPost()throws Exception{
+        when(postService.getPostById(1)).thenReturn(post);
+
+        mockMvc.perform(get("/posts/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getAllCommentsByUserId_shouldAllComments() throws Exception {
+        List<Post> posts = Arrays.asList(post1, post2);
+        when(postService.getAllPostsByUserId(1)).thenReturn(posts);
+
+        mockMvc.perform(get("/posts/1/post"))
+                .andExpect(status().isOk());
+    }
+
+/*    //TODO how to use method with return type VOID
+    @Test
+    public void deletePost_shouldDeletePost() throws Exception{
+        when(postService.deletePost(new Post("title", "text"));
+    }*/
 }

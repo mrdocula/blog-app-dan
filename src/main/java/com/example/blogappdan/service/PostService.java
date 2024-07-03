@@ -2,6 +2,8 @@ package com.example.blogappdan.service;
 
 import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.entity.User;
+import com.example.blogappdan.exceptions.BusinessException;
+import com.example.blogappdan.exceptions.BusinessExceptionReason;
 import com.example.blogappdan.repository.PostRepository;
 import com.example.blogappdan.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -18,14 +20,14 @@ public class PostService {
 
     private final UserRepository userRepository;
 
-    public Post createPostForUser(int userId, String title, String text){
+    public Post createPostForUser(int userId, String title, String text) throws BusinessException {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()){
             Post post = new Post(title, text);
             post.setUser(optionalUser.get());
             return postRepository.save(post);
         }else{
-            throw new RuntimeException("User with ID '" + userId + "' does not exist!");
+            throw new BusinessException(BusinessExceptionReason.USER_ID_INVALID);
         }
     }
 
@@ -41,18 +43,18 @@ public class PostService {
            return postRepository.findAllByUserId(userId);
     }
 
-    public void deletePost(Post post){
-        postRepository.delete(post);
+        public void deletePost(Post post){
+            postRepository.delete(post);
     }
 
-    public Post deletePostById(int postId) throws Exception {
+    public Post deletePostById(int postId) throws BusinessException {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if(optionalPost.isPresent()){
             Post post = optionalPost.get();
             postRepository.delete(post);
             return post;
         }else{
-            throw new Exception("Not found post!");
+            throw new BusinessException(BusinessExceptionReason.POST_ID_INVALID);
         }
     }
 }

@@ -19,5 +19,4 @@ public class BusinessException extends Exception {
         this.source = reason.getSource();
         this.httpStatus = reason.getHttpStatus();
     }
-
 }
