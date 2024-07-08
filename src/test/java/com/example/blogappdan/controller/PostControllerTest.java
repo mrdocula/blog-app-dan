@@ -6,7 +6,6 @@ import com.example.blogappdan.entity.User;
 import com.example.blogappdan.exceptions.BusinessException;
 import com.example.blogappdan.exceptions.BusinessExceptionReason;
 import com.example.blogappdan.service.PostService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -59,7 +60,6 @@ public class PostControllerTest {
         comment = new Comment(1, "Some text 1", LocalDateTime.now(), post, user);
     }
 
-
     @Test
     public void createPost_shouldCreatePostForUser() throws Exception {
         when(postService.createPostForUser(user.getId(), post.getTitle(), post.getPostText())).thenReturn(post);
@@ -81,6 +81,28 @@ public class PostControllerTest {
                         .param("text", "text")
                         .param("userId", String.valueOf(user.getId()))
         ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updatePost_shouldReturnUpdatedPost()throws Exception{
+        when(postService.updatePostById(1, post.getTitle(), post.getPostText())).thenReturn(post);
+        mockMvc.perform(
+                put("/posts/update/1")
+                        .param("title", "Some title")
+                        .param("text", "Some text")
+                        .param("postId", "1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updatePost_shouldReturnNotFound()throws Exception{
+        when(postService.updatePostById(eq(1), anyString(), anyString()))
+                .thenThrow(new BusinessException(BusinessExceptionReason.POST_ID_INVALID));
+        mockMvc.perform(
+                        put("/posts/update/1")
+                                .param("title", "Some title")
+                                .param("text", "Some text"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -106,12 +128,4 @@ public class PostControllerTest {
         mockMvc.perform(get("/posts/1/post"))
                 .andExpect(status().isOk());
     }
-
-/*    //TODO how to use method with return type VOID
-    @Test
-    public void deletePost_shouldDeletePost() throws Exception{
-        when(postService.deletePost(new Post("title", "text"));
-    }*/
-
-
 }

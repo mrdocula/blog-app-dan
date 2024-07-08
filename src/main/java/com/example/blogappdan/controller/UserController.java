@@ -1,6 +1,7 @@
 package com.example.blogappdan.controller;
 
 import com.example.blogappdan.entity.User;
+import com.example.blogappdan.exceptions.BusinessException;
 import com.example.blogappdan.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,24 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<User> createUsers(@RequestParam("name") String name,
-                                            @RequestParam("surname") String username) {
+    public ResponseEntity<User> createUser(@RequestParam("name") String name,
+                                           @RequestParam("surname") String surname){
         try{
-            return ResponseEntity.ok(userService.createOrUpdateUser(name, username));
-        }catch(RuntimeException ex){
+            return ResponseEntity.ok(userService.createUser(name, surname));
+        }catch(BusinessException ex){
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestParam("oldName") String oldName,
+                                           @RequestParam("oldSurname") String oldSurname,
+                                           @RequestParam("name") String name,
+                                           @RequestParam("surname") String surname){
+        try{
+            return ResponseEntity.ok(userService.updateUser(oldName, oldSurname, name, surname));
+        }catch(BusinessException ex){
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -63,5 +76,4 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
 }

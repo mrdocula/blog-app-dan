@@ -17,7 +17,6 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
-
     private final UserRepository userRepository;
 
     public Post createPostForUser(int userId, String title, String text) throws BusinessException {
@@ -28,6 +27,18 @@ public class PostService {
             return postRepository.save(post);
         } else {
             throw new BusinessException(BusinessExceptionReason.USER_ID_INVALID);
+        }
+    }
+
+    public Post updatePostById(int postId, String title, String text) throws BusinessException {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            post.setTitle(title);
+            post.setPostText(text);
+            return postRepository.save(post);
+        } else {
+            throw new BusinessException(BusinessExceptionReason.POST_ID_INVALID);
         }
     }
 

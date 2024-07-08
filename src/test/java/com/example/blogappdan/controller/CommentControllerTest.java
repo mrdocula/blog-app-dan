@@ -1,11 +1,14 @@
 package com.example.blogappdan.controller;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.entity.User;
+import com.example.blogappdan.exceptions.BusinessException;
+import com.example.blogappdan.exceptions.BusinessExceptionReason;
 import com.example.blogappdan.service.CommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,26 +48,37 @@ public class CommentControllerTest {
     }
 
     @Test
-    public void createComment_shouldCreateComment() throws Exception {
-        when(commentService.createOrUpdateCommentForPost(1, user.getId(), "Some text")).thenReturn(comment1);
+    public void createCommentForPost_shouldComment()throws Exception{
+        when(commentService.createCommentForPost(post.getPostId(),user.getId(), "Some text")).thenReturn(comment1);
 
-        mockMvc.perform(post("/comments/create")
-                        .param("text", "Some text")
+        mockMvc.perform(
+                post("/comments/create")
+                        .param("postId", String.valueOf(post.getPostId()))
                         .param("userId", String.valueOf(user.getId()))
-                        .param("postId", "1"))
+                        .param("text", "Some text"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void createComment_shouldNotCreateComment() throws Exception {
-        when(commentService.createOrUpdateCommentForPost(1, user.getId(), "Some text")).thenThrow(
-                new RuntimeException("Post with ID '1' does not exist!"));
+    public void updateCommentForPost_shouldReturnComment()throws Exception{
+        when(commentService.updateComment(1, "Some text")).thenReturn(comment1);
 
-        mockMvc.perform(post("/comments/create")
-                        .param("text", "Some text")
-                        .param("userId", String.valueOf(user.getId()))
-                        .param("postId", "1"))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(
+                        post("/comments/update/1")
+                                .param("commentId", String.valueOf(comment1.getCommentId()))
+                                .param("text", "Some text"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateCommentForPost_shouldReturnNotFound()throws Exception{
+        when(commentService.updateComment(1, "Some text")).thenThrow(new BusinessException(BusinessExceptionReason.COMMENT_ID_INVALID));
+
+        mockMvc.perform(
+                        post("/comments/update/1")
+                                .param("commentId", String.valueOf(comment1.getCommentId()))
+                                .param("text", "Some text"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -89,24 +103,22 @@ public class CommentControllerTest {
         List<Comment> comments = Arrays.asList(comment1, comment2);
         when(commentService.getAllCommentsByPostId(1)).thenReturn(comments);
 
-        mockMvc.perform(get("/comments/1/comment"))
+        mockMvc.perform(get("/comments/post/1"))
                 .andExpect(status().isOk());
     }
-
 
     @Test
     public void getAllCommentsByUserId_shouldReturnComments() throws Exception {
         List<Comment> comments = Arrays.asList(comment1, comment2);
         when(commentService.getAllCommentsByUserId(user.getId())).thenReturn(comments);
 
-        mockMvc.perform(get("/comments/1/comment"))
+        mockMvc.perform(get("/comments/user/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void deleteComment_shouldDeleteComment() throws Exception {
         when(commentService.deleteCommentByCommentId(1)).thenReturn(comment1);
-
         mockMvc.perform(delete("/comments/delete/1")
                         .param("commentId", "1"))
                 .andExpect(status().isOk());
@@ -115,7 +127,6 @@ public class CommentControllerTest {
     @Test
     public void deleteCommentNotFound_shouldReturnBadRequest() throws Exception {
         when(commentService.deleteCommentByCommentId(1)).thenThrow(new RuntimeException("Comment not found"));
-
         mockMvc.perform(delete("/comments/delete/1")
                         .param("commentId", "1"))
                 .andExpect(status().isBadRequest());

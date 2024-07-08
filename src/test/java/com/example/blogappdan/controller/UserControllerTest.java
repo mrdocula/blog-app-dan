@@ -3,6 +3,8 @@ package com.example.blogappdan.controller;
 import com.example.blogappdan.entity.Comment;
 import com.example.blogappdan.entity.Post;
 import com.example.blogappdan.entity.User;
+import com.example.blogappdan.exceptions.BusinessException;
+import com.example.blogappdan.exceptions.BusinessExceptionReason;
 import com.example.blogappdan.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +52,7 @@ public class UserControllerTest {
 
     @Test
     public void createUser_shouldCreateUser()throws Exception{
-        when(userService.createOrUpdateUser("Tom", "William")).thenReturn(user1);
+        when(userService.createUser("Tom", "William")).thenReturn(user1);
         mockMvc.perform(
                 post("/users/create")
                     .param("name", "Tom")
@@ -59,15 +61,28 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createUser_shouldNotCreateUser() throws  Exception{
-        when(userService.createOrUpdateUser("Tom", "William")).thenThrow(
-                new RuntimeException("User " + user1.getName() + " does not exist!"));
+    public void updateUser_shouldUpdateUser()throws Exception{
+        when(userService.updateUser("Tom", "William", "Jack", "Russell")).thenReturn(user1);
         mockMvc.perform(
-                post("/users/create")
-                        .param("name", "Tom")
-                        .param("surname", "William"))
-                .andExpect(status().isBadRequest());
+                post("/users/update")
+                        .param("oldName", "Tom")
+                        .param("oldSurname", "William")
+                        .param("name", "Jack")
+                        .param("surname", "Russell"))
+                .andExpect(status().isOk());
+    }
 
+    @Test
+    public void  updateUser_shouldNotUpdateUser() throws Exception{
+        when(userService.updateUser("Tom", "William", "Jack", "Russell"))
+                .thenThrow(new BusinessException(BusinessExceptionReason.USER_ID_INVALID));
+        mockMvc.perform(
+                post("/users/update")
+                        .param("oldName", "Tom")
+                        .param("oldSurname", "William")
+                        .param("name", "Jack")
+                        .param("surname", "Russell"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -114,31 +129,3 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

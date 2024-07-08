@@ -16,9 +16,23 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User createOrUpdateUser(String name, String surname) {
+    public User createUser(String name, String surname) throws BusinessException{
         // TODO: separate create and update functionalities (update by user ID)
-        return null;
+        User user = new User(name, surname);
+        return userRepository.save(user);
+    }
+
+    public User  updateUser(String oldName, String oldSurname, String name, String surname) throws BusinessException{
+        // TODO: separate create and update functionalities (update by user ID)
+        Optional<User> optionalUser = userRepository.findByNameAndSurname(oldName, oldSurname);
+        if (optionalUser.isPresent()){
+           User user = optionalUser.get();
+           user.setName(name);
+           user.setSurname(surname);
+           return userRepository.save(user);
+        }else{
+            throw new BusinessException(BusinessExceptionReason.USER_ID_INVALID);
+        }
     }
 
     public User getUserById(int userId) {
