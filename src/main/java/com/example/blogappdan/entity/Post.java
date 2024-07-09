@@ -1,5 +1,6 @@
 package com.example.blogappdan.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,13 +23,17 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int postId;
     private String title;
-    private String text;
+    private String postText;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> commentList;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Post(String title, String text) {
         this.title = title;
-        this.text = text;
+        this.postText = text;
     }
 }

@@ -4,9 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity(name="blog-users")
 @Data
@@ -18,12 +21,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    private String username;
+    private String surname;
 
-    // TODO: Create association between USER - POST
+    @OneToMany(mappedBy = "user")
+    private List<Post> postList;
 
-    public User(String name, String username){
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList;
+
+    public User(String name, String surname){
         this.name = name;
-        this.username = username;
+        this.surname = surname;
     }
 }
