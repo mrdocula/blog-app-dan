@@ -1,0 +1,26 @@
+1. create security package and create SecurityConfig class in it.
+SecurityConfig should implement   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
+2. Add method - public AuthenticationManager authenticationManger(AuthenticationConfiguration authenticationConfiguration) to SecurityConfig
+3. To the main application class (class with main method) add BCRyptPasswordEncoder:
+
+@Bean
+public BCryptPasswordEncoder bCryptPasswordEncoder() {
+	return new BCryptPasswordEncoder();
+}
+
+4. Create enum in the entity package:
+
+public enum UserRoles {
+
+    USER,
+    ADMIN
+}
+
+5. Implement UserDetails interface in the User entity class and provide needed setters/method implementations, variables/fields
+
+6. Add grantedAuthority to the user:
+
+ @Override
+ public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(UserRoles.USER.toString()));
+ }
