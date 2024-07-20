@@ -21,7 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/create")
+    @PostMapping("/login")
     public ResponseEntity<User> createUser(@RequestParam("name") String name,
                                            @RequestParam("surname") String surname){
         try{
@@ -31,7 +31,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/update")
+    @PostMapping("/register")
     public ResponseEntity<User> updateUser(@RequestParam("oldName") String oldName,
                                            @RequestParam("oldSurname") String oldSurname,
                                            @RequestParam("name") String name,

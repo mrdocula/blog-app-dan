@@ -54,7 +54,7 @@ public class UserControllerTest {
     public void createUser_shouldCreateUser()throws Exception{
         when(userService.createUser("Tom", "William")).thenReturn(user1);
         mockMvc.perform(
-                post("/users/create")
+                post("/users/login")
                     .param("name", "Tom")
                     .param("surname", "William"))
                 .andExpect(status().isOk());
@@ -64,7 +64,7 @@ public class UserControllerTest {
     public void updateUser_shouldUpdateUser()throws Exception{
         when(userService.updateUser("Tom", "William", "Jack", "Russell")).thenReturn(user1);
         mockMvc.perform(
-                post("/users/update")
+                post("/users/register")
                         .param("oldName", "Tom")
                         .param("oldSurname", "William")
                         .param("name", "Jack")
@@ -77,7 +77,7 @@ public class UserControllerTest {
         when(userService.updateUser("Tom", "William", "Jack", "Russell"))
                 .thenThrow(new BusinessException(BusinessExceptionReason.USER_ID_INVALID));
         mockMvc.perform(
-                post("/users/update")
+                post("/users/register")
                         .param("oldName", "Tom")
                         .param("oldSurname", "William")
                         .param("name", "Jack")
