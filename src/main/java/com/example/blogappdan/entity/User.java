@@ -41,9 +41,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Comment> commentList;
 
-    public User(String name, String surname) {
-        this.name = name;
-        this.surname = surname;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
         this.isAccountNonExpired = true;
         this.isAccountNonLocked = true;
         this.isCredentialsNonExpired = true;

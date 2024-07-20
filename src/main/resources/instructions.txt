@@ -24,3 +24,20 @@ public enum UserRoles {
  public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(UserRoles.USER.toString()));
  }
+
+ ----
+
+ 7. Add new class AuthorizationController
+ 8. Add new endpoint  @PostMapping("/login")
+ 9. Add a property of AuthenticationManager
+ 10. Within the endpoint call authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(username, password))
+ 11. If authorization is successful it will return Authentication object (if not - the AuthenticationProvider should throw an AuthenticationException.)
+ 12. User is logged in - add user info to context - SecurityContextHolder.getContext().setAuthentication(authentication);
+ 13. print success message ResponseEntity.ok("User " + userDetails.getUsername() + " successfully logged in");
+
+ 14. Create method in UserRepository:    User findUserByUsername(String username);
+ 15. Implement   findUserByUsername in UserService under name getUserByUsername
+ 16. Create class AuthenticationService which should implement UserDetailsService
+ 17. Implement  public UserDetails loadUserByUsername(String username) by calling getUserByUsername inside of it or
+ throwing an exception: throw new UsernameNotFoundException(username);
+ 18. change the create/register operation to pass username and password instead of username and surname

@@ -22,10 +22,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestParam("name") String name,
-                                           @RequestParam("surname") String surname){
+    public ResponseEntity<User> createUser(@RequestParam("username") String name,
+                                           @RequestParam("password") String password){
         try{
-            return ResponseEntity.ok(userService.createUser(name, surname));
+            return ResponseEntity.ok(userService.createUser(name, password));
         }catch(BusinessException ex){
             return ResponseEntity.badRequest().build();
         }

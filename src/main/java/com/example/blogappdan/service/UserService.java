@@ -5,6 +5,7 @@ import com.example.blogappdan.exceptions.BusinessException;
 import com.example.blogappdan.exceptions.BusinessExceptionReason;
 import com.example.blogappdan.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +16,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public User createUser(String name, String surname) throws BusinessException{
+    public User createUser(String name, String password) throws BusinessException{
         // TODO: separate create and update functionalities (update by user ID)
-        User user = new User(name, surname);
+        User user = new User(name, bCryptPasswordEncoder.encode(password));
         return userRepository.save(user);
     }
 
@@ -56,5 +58,9 @@ public class UserService {
         } else {
             throw new BusinessException(BusinessExceptionReason.USER_ID_INVALID);
         }
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
     }
 }
